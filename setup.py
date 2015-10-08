@@ -9,7 +9,7 @@ setup(
     author = 'Omar Abou Mrad',
     author_email = 'omar.aboumrad@gmail.com',
     url = 'https://github.com/omaraboumrad/mastool',
-    download_url = 'https://github.com/omaraboumrad/mastool/archive/0.0.1.tar.gz',
+    download_url = 'https://github.com/omaraboumrad/mastool/archive/0.0.2.tar.gz',
     keywords = ['static', 'analysis', 'practices'],
     classifiers = [],
 
