@@ -102,3 +102,34 @@ def find_path_join_using_plus(tree):
             found.append(node.lineno)
 
     return found
+
+
+@h.labeled('AssignToBuiltin')
+def find_assign_to_builtin(tree):
+    """
+    >>> code = 'a = 1'
+    >>> tree = ast.parse(code)
+    >>> assert find_assign_to_builtin(tree) == []
+
+    >>> code = 'id = 1'
+    >>> tree = ast.parse(code)
+    >>> assert find_assign_to_builtin(tree) == [1]
+
+    >>> code = 'a, map = 1, 2'
+    >>> tree = ast.parse(code)
+    >>> assert find_assign_to_builtin(tree) == [1]
+    """
+    builtins = set(__builtins__.keys())
+
+    found = []
+
+    for node in ast.walk(tree):
+        checks = (
+            h.is_assign(node)
+            and len(builtins & set(h.target_names(node.targets))) > 0
+        )
+
+        if checks:
+            found.append(node.lineno)
+
+    return found

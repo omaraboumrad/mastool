@@ -28,6 +28,10 @@ PATH JOINING WITH PLUS
 
     a + '/' + b
 
+ASSIGNING TO BUILTIN
+
+    id = 1
+
 ## FAQ
 
 How do I make the script return a none-0 code when any result found?
