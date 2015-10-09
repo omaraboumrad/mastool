@@ -15,7 +15,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'mastool = mastool:main',
+            'mastool = mastool.mail:main',
         ]
     }
 )
