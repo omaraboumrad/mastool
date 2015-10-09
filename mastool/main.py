@@ -22,6 +22,7 @@ def build_parser():
 
     return parser
 
+
 def main():
     args = build_parser().parse_args()
     code_file = args.FILE
