@@ -13,6 +13,8 @@ is_str = lambda s: isinstance(s, ast.Str)
 is_add = lambda s: isinstance(s, ast.Add)
 is_assign = lambda s: isinstance(s, ast.Assign)
 is_tuple = lambda s: isinstance(s, ast.Tuple)
+is_except = lambda s: isinstance(s, ast.ExceptHandler)
+is_pass = lambda s: isinstance(s, ast.Pass)
 
 
 def call_name_is(s, n):

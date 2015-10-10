@@ -133,3 +133,90 @@ def find_assign_to_builtin(tree):
             found.append(node.lineno)
 
     return found
+
+
+@h.labeled('GenericException')
+def find_generic_exception(tree):
+    """
+    >>> code = '''try:
+    ...     a
+    ... except:
+    ...     b
+    ... '''
+    >>> tree = ast.parse(code)
+    >>> assert find_generic_exception(tree) == [3]
+
+    >>> code = '''try:
+    ...     a
+    ... except:
+    ...     b
+    ... except:
+    ...     c
+    ... '''
+    >>> tree = ast.parse(code)
+    >>> assert find_generic_exception(tree) == [3, 5]
+
+    >>> code = '''try:
+    ...     a
+    ... except Exception:
+    ...     b
+    ... '''
+    >>> tree = ast.parse(code)
+    >>> assert find_generic_exception(tree) == []
+    """
+    found = []
+
+    for node in ast.walk(tree):
+        checks = (
+            h.is_except(node)
+            and node.type is None
+        )
+
+        if checks:
+            found.append(node.lineno)
+
+    return found
+
+@h.labeled('SilentGenericException')
+def find_silent_exception(tree):
+    """
+    >>> code = '''try:
+    ...     a
+    ... except:
+    ...     pass
+    ... '''
+    >>> tree = ast.parse(code)
+    >>> assert find_silent_exception(tree) == [3]
+
+    >>> code = '''try:
+    ...     a
+    ... except:
+    ...     pass
+    ... except:
+    ...     pass
+    ... '''
+    >>> tree = ast.parse(code)
+    >>> assert find_silent_exception(tree) == [3, 5]
+
+    >>> code = '''try:
+    ...     a
+    ... except Exception:
+    ...     pass
+    ... '''
+    >>> tree = ast.parse(code)
+    >>> assert find_silent_exception(tree) == []
+    """
+    found = []
+
+    for node in ast.walk(tree):
+        checks = (
+            h.is_except(node)
+            and node.type is None
+            and len(node.body) == 1
+            and h.is_pass(node.body[0])
+        )
+
+        if checks:
+            found.append(node.lineno)
+
+    return found

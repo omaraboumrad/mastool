@@ -32,6 +32,20 @@ ASSIGNING TO BUILTIN
 
     id = 1
 
+GENERIC EXCEPTIONS
+
+    try:
+        xyz
+    except:
+        abc
+
+SILENT GENERIC EXCEPTIONS
+
+    try:
+        xyz
+    except:
+        pass
+
 ## FAQ
 
 How do I make the script return a none-0 code when any result found?
