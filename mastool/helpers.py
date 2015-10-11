@@ -16,6 +16,8 @@ is_tuple = lambda s: isinstance(s, ast.Tuple)
 is_except = lambda s: isinstance(s, ast.ExceptHandler)
 is_pass = lambda s: isinstance(s, ast.Pass)
 is_importfrom = lambda s: isinstance(s, ast.ImportFrom)
+is_compare = lambda s: isinstance(s, ast.Compare)
+is_eq = lambda s: isinstance(s, ast.Eq)
 
 
 def call_name_is(s, n):

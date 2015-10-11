@@ -50,6 +50,10 @@ IMPORT STAR
 
     from a import *
 
+EQUALS TRUE/FALSE
+
+    a == True
+
 ## FAQ
 
 How do I make the script return a none-0 code when any result found?

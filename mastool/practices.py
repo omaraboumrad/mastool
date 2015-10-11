@@ -177,6 +177,7 @@ def find_generic_exception(tree):
 
     return found
 
+
 @h.labeled('SilentGenericException')
 def find_silent_exception(tree):
     """
@@ -239,6 +240,39 @@ def find_import_star(tree):
         checks = (
             h.is_importfrom(node)
             and '*' in h.importfrom_names(node.names)
+        )
+
+        if checks:
+            found.append(node.lineno)
+
+    return found
+
+
+@h.labeled('EqualsTrueOrFalse')
+def find_equals_true_or_false(tree):
+    """
+    >>> code = '''return a == True'''
+    >>> tree = ast.parse(code)
+    >>> assert find_equals_true_or_false(tree) == [1]
+
+    >>> code = '''if a == False:
+    ...     pass
+    ... '''
+    >>> tree = ast.parse(code)
+    >>> assert find_equals_true_or_false(tree) == [1]
+
+    >>> code = '''a == b'''
+    >>> tree = ast.parse(code)
+    >>> assert find_equals_true_or_false(tree) == []
+    """
+    found = []
+
+    for node in ast.walk(tree):
+        checks = (
+            h.is_compare(node)
+            and len(node.ops) == 1
+            and h.is_eq(node.ops[0])
+            and any(h.is_boolean(n) for n in node.comparators)
         )
 
         if checks:
