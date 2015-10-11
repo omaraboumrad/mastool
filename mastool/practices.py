@@ -220,3 +220,28 @@ def find_silent_exception(tree):
             found.append(node.lineno)
 
     return found
+
+
+@h.labeled('ImportStar')
+def find_import_star(tree):
+    """
+    >>> code = '''from a import *'''
+    >>> tree = ast.parse(code)
+    >>> assert find_import_star(tree) == [1]
+
+    >>> code = '''from a import x, y'''
+    >>> tree = ast.parse(code)
+    >>> assert find_import_star(tree) == []
+    """
+    found = []
+
+    for node in ast.walk(tree):
+        checks = (
+            h.is_importfrom(node)
+            and '*' in h.importfrom_names(node.names)
+        )
+
+        if checks:
+            found.append(node.lineno)
+
+    return found

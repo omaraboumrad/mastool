@@ -46,6 +46,10 @@ SILENT GENERIC EXCEPTIONS
     except:
         pass
 
+IMPORT STAR
+
+    from a import *
+
 ## FAQ
 
 How do I make the script return a none-0 code when any result found?

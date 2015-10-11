@@ -15,6 +15,7 @@ is_assign = lambda s: isinstance(s, ast.Assign)
 is_tuple = lambda s: isinstance(s, ast.Tuple)
 is_except = lambda s: isinstance(s, ast.ExceptHandler)
 is_pass = lambda s: isinstance(s, ast.Pass)
+is_importfrom = lambda s: isinstance(s, ast.ImportFrom)
 
 
 def call_name_is(s, n):
@@ -36,6 +37,11 @@ def target_names(targets):
                     names.append(element.id)
 
     return names
+
+
+def importfrom_names(names):
+    return [n.name for n in names]
+
 
 
 def labeled(text):
