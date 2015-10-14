@@ -1,6 +1,9 @@
+"""
+Practices and Checks listing
+"""
 import ast
 
-import helpers as h
+from mastool import helpers as h
 
 
 @h.labeled('For/In/DictKeys')
@@ -33,7 +36,7 @@ def find_for_x_in_y_keys(tree):
 
 
 @h.labeled('If/RetBool/Else/RetBool')
-def find_if_x_ret_bool_else_ret_bool(tree):
+def find_if_x_retbool_else_retbool(tree):
     """
     >>> code = '''if foo:
     ...     print True

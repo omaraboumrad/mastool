@@ -1,4 +1,7 @@
 #! /usr/bin/env python
+"""
+main entry to the tool
+"""
 
 from __future__ import print_function
 
@@ -6,10 +9,13 @@ import sys
 import ast
 import argparse
 
-import practices
+from mastool import practices
 
 
 def build_parser():
+    """
+    Builds the argument parser.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('FILE',
                         help='Target file to run mastool against')
@@ -24,6 +30,9 @@ def build_parser():
 
 
 def main():
+    """
+    Primary entry point to the tool.
+    """
     args = build_parser().parse_args()
     code_file = args.FILE
 
@@ -33,7 +42,7 @@ def main():
         print("Error: Could not parse: {}".format(code_file))
         return
 
-    paths = filter(lambda y: hasattr(y, 'label'), practices.__dict__.values())
+    paths = [x for x in practices.__dict__.values() if hasattr(x, 'label')]
 
     caught = []
     for checker in paths:
