@@ -25,7 +25,7 @@ def find_for_x_in_y_keys(tree):
 
     for node in ast.walk(tree):
         checks = (
-            h.is_for(node)
+            isinstance(node, ast.For)
             and h.call_name_is(node.iter, 'keys')
         )
 
@@ -42,7 +42,7 @@ def find_if_x_retbool_else_retbool(tree):
     ...     print True
     ... '''
     >>> tree = ast.parse(code)
-    >>> assert find_if_x_ret_bool_else_ret_bool(tree) == []
+    >>> assert find_if_x_retbool_else_retbool(tree) == []
 
     >>> code = '''if foo:
     ...     return False
@@ -50,17 +50,17 @@ def find_if_x_retbool_else_retbool(tree):
     ...     return True
     ... '''
     >>> tree = ast.parse(code)
-    >>> assert find_if_x_ret_bool_else_ret_bool(tree) == [1]
+    >>> assert find_if_x_retbool_else_retbool(tree) == [1]
     """
     found = []
 
     for node in ast.walk(tree):
         checks = (
-            h.is_if(node)
-            and h.is_return(node.body[0])
+            isinstance(node, ast.If)
+            and isinstance(node.body[0], ast.Return)
             and h.is_boolean(node.body[0].value)
             and h.has_else(node)
-            and h.is_return(node.orelse[0])
+            and isinstance(node.orelse[0], ast.Return)
             and h.is_boolean(node.orelse[0].value)
         )
 
@@ -93,11 +93,11 @@ def find_path_join_using_plus(tree):
 
     for node in ast.walk(tree):
         checks = (
-            h.is_binop(node)
-            and h.is_add(node.op)
-            and h.is_binop(node.left)
-            and h.is_add(node.left.op)
-            and h.is_str(node.left.right)
+            isinstance(node, ast.BinOp)
+            and isinstance(node.op, ast.Add)
+            and isinstance(node.left, ast.BinOp)
+            and isinstance(node.left.op, ast.Add)
+            and isinstance(node.left.right, ast.Str)
             and node.left.right.s in ['/', "\\"]
         )
 
@@ -128,7 +128,7 @@ def find_assign_to_builtin(tree):
 
     for node in ast.walk(tree):
         checks = (
-            h.is_assign(node)
+            isinstance(node, ast.Assign)
             and len(builtins & set(h.target_names(node.targets))) > 0
         )
 
@@ -171,7 +171,7 @@ def find_generic_exception(tree):
 
     for node in ast.walk(tree):
         checks = (
-            h.is_except(node)
+            isinstance(node, ast.ExceptHandler)
             and node.type is None
         )
 
@@ -214,10 +214,10 @@ def find_silent_exception(tree):
 
     for node in ast.walk(tree):
         checks = (
-            h.is_except(node)
+            isinstance(node, ast.ExceptHandler)
             and node.type is None
             and len(node.body) == 1
-            and h.is_pass(node.body[0])
+            and isinstance(node.body[0], ast.Pass)
         )
 
         if checks:
@@ -241,7 +241,7 @@ def find_import_star(tree):
 
     for node in ast.walk(tree):
         checks = (
-            h.is_importfrom(node)
+            isinstance(node, ast.ImportFrom)
             and '*' in h.importfrom_names(node.names)
         )
 
@@ -272,9 +272,9 @@ def find_equals_true_or_false(tree):
 
     for node in ast.walk(tree):
         checks = (
-            h.is_compare(node)
+            isinstance(node, ast.Compare)
             and len(node.ops) == 1
-            and h.is_eq(node.ops[0])
+            and isinstance(node.ops[0], ast.Eq)
             and any(h.is_boolean(n) for n in node.comparators)
         )
 
