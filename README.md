@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/omaraboumrad/mastool.svg?branch=master)](https://travis-ci.org/omaraboumrad/mastool)
+
 # mastool
 
 static analysis for bad and/or avoidable practices
