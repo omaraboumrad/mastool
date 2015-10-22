@@ -54,6 +54,11 @@ EQUALS TRUE/FALSE
 
     a == True
 
+FUNCTION ARG IS LIST
+
+    def foo(x, y=[]):
+        pass
+
 ## FAQ
 
 How do I make the script return a none-0 code when any result found?

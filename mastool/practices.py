@@ -282,3 +282,38 @@ def find_equals_true_or_false(tree):
             found.append(node.lineno)
 
     return found
+
+
+@h.labeled('DefaultArgIsList')
+def find_default_arg_is_list(tree):
+    """
+    >>> code = '''def foo(x, y):
+    ...     pass
+    ... '''
+    >>> tree = ast.parse(code)
+    >>> assert find_default_arg_is_list(tree) == []
+
+    >>> code = '''def foo(x, y=[]):
+    ...     pass
+    ... '''
+    >>> tree = ast.parse(code)
+    >>> assert find_default_arg_is_list(tree) == [1]
+
+    >>> code = '''def foo(x, y=[1,2,3]):
+    ...     pass
+    ... '''
+    >>> tree = ast.parse(code)
+    >>> assert find_default_arg_is_list(tree) == [1]
+    """
+    found = []
+
+    for node in ast.walk(tree):
+        checks = (
+            isinstance(node, ast.FunctionDef)
+            and any([n for n in node.args.defaults if isinstance(n, ast.List)])
+        )
+
+        if checks:
+            found.append(node.lineno)
+
+    return found
