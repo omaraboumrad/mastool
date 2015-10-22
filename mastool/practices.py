@@ -39,7 +39,7 @@ def find_for_x_in_y_keys(tree):
 def find_if_x_retbool_else_retbool(tree):
     """
     >>> code = '''if foo:
-    ...     print True
+    ...     return True
     ... '''
     >>> tree = ast.parse(code)
     >>> assert find_if_x_retbool_else_retbool(tree) == []

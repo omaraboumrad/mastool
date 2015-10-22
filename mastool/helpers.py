@@ -18,10 +18,13 @@ def is_boolean(node):
     """
     Checks if node is True or False
     """
-    return (
+    return any([
         isinstance(node, ast.Name)
-        and node.id in ('True', 'False')
-    )
+        and node.id in ('True', 'False'),
+        hasattr(ast, 'NameConstant')  # Support for Python 3 NameConstant
+        and isinstance(node, getattr(ast, 'NameConstant')) # screw you pylint!
+        and str(node.value) in ('True', 'False')
+    ])
 
 
 def call_name_is(siter, name):
