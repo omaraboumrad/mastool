@@ -6,6 +6,8 @@ from __future__ import print_function
 
 import argparse
 import ast
+import fnmatch
+import os
 import sys
 
 from mastool import practices
@@ -14,8 +16,8 @@ from mastool import practices
 def build_parser():
     """Builds the argument parser."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('FILE',
-                        help='Target file to run mastool against')
+    parser.add_argument('TARGET',
+                        help='Target file or folder to run mastool against')
 
     parser.add_argument('--verbove', '-v',
                         dest='verbose',
@@ -32,30 +34,43 @@ def build_parser():
     return parser
 
 
+def fetch_files_matching(target, pattern):
+    """Retrieve all files from target directory"""
+    for root, dirs, files in os.walk(target):
+        for filename in fnmatch.filter(files, pattern):
+            yield os.path.join(root, filename)
+
+
 def main():
     """Primary entry point to the tool."""
     args = build_parser().parse_args()
-    code_file = args.FILE
 
-    try:
-        tree = ast.parse(open(code_file).read())
-    except SyntaxError:
-        print("Error: Could not parse: {}".format(code_file))
-        return
-
-    paths = [x for x in practices.__dict__.values() if hasattr(x, 'code')]
+    if os.path.isdir(args.TARGET):
+        files = fetch_files_matching(args.TARGET, '*.py')
+    else:
+        files = [args.TARGET]
 
     caught = []
-    for checker in paths:
-        adherance = checker(tree)
-        caught.append(len(adherance) > 0)
-        for lineno in adherance:
-            solution_text = ' %s' % checker.solution if args.verbose else ''
-            print('{}:{}: {} {}{}'.format(code_file,
-                                          lineno,
-                                          checker.code,
-                                          checker.msg,
-                                          solution_text))
+
+    for code_file in files:
+        try:
+            tree = ast.parse(open(code_file).read())
+        except SyntaxError:
+            print("Error: Could not parse: {}".format(code_file))
+            continue
+
+        paths = [x for x in practices.__dict__.values() if hasattr(x, 'code')]
+
+        for checker in paths:
+            adherance = checker(tree)
+            caught.append(len(adherance) > 0)
+            for lineno in adherance:
+                solution = ' (%s)' % checker.solution if args.verbose else ''
+                print('{}:{}: {} {}{}'.format(code_file,
+                                              lineno,
+                                              checker.code,
+                                              checker.msg,
+                                              solution))
 
     if any(caught) and args.fail_hard:
         sys.exit(1)
