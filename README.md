@@ -4,65 +4,102 @@
 
 static analysis for bad and/or avoidable practices
 
-## Installation
+### Installation
 
     pip install mastool
 
-## Usage
+### Usage
 
-    $ mastool code.py
+    usage: mastool [-h] [--verbove] [--fail-hard] TARGET
 
-## Checks For
+    positional arguments:
+      TARGET           Target file or folder to run mastool against
 
-IF/RETURN/BOOL/ELSE/RETURN/BOOL
+    optional arguments:
+      -h, --help       show this help message and exit
+      --verbove, -v    enable suggested solution
+      --fail-hard, -f  exits with a none-zero status when issues found
 
-    if XXX:
-        return BOOL
-    else:
-        return BOOL
+### Checks For
 
-FOR/X/IN/DICT/KEYS
+Code | Message
+--- | ---
+W001 | looping against dictionary keys
 
     for x in d.keys():
         ...
 
-PATH JOINING WITH PLUS
+Code | Message
+--- | ---
+W002 | simplifiable if condition
 
-    a + '/' + b
+    if cond:
+        return True
+    else:
+        return False
 
-ASSIGNING TO BUILTIN
+Code | Message
+--- | ---
+W003 | joining path with plus
+
+    path1 + '/' + path2
+
+Code | Message
+--- | ---
+W004 | assigning to built-in
 
     id = 1
 
-GENERIC EXCEPTIONS
+Code | Message
+--- | ---
+W005 | catching a generic exception
 
     try:
         xyz
     except:
         abc
 
-SILENT GENERIC EXCEPTIONS
+Code | Message
+--- | ---
+W006 | catching a generic exception and passing it silently
 
     try:
         xyz
     except:
         pass
 
-IMPORT STAR
+Code | Message
+--- | ---
+W007 | use of import star
 
     from a import *
 
-EQUALS TRUE/FALSE
+Code | Message
+--- | ---
+W008 | comparing to True or False
 
     a == True
 
-FUNCTION ARG IS LIST
+Code | Message
+--- | ---
+W009 | use of list as a default arg
 
     def foo(x, y=[]):
         pass
 
-## FAQ
+---
 
-How do I make the script return a none-0 code when any result found?
+### FAQ
+
+1. Some of these issues are not bad/erroneous!
+
+    Yes, in various contexts sometimes it may be ok (and possibly unavoidable) to
+    use these constructs, at which point you can ignore them. (Soon)
+
+2. How do I make the script return a none-0 code when any result found?
 
     $ mastool --fail-hard code.py
+
+3. How do I show the suggested practice?
+
+    $ mastool --verbose code.py
