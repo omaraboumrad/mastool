@@ -6,9 +6,12 @@ import ast
 from mastool import helpers as h
 
 
-@h.labeled('For/In/DictKeys')
+@h.labeled(code='W001',
+           msg='looping against dictionary keys',
+           solution="use 'for key in dictionary' instead.")
 def find_for_x_in_y_keys(tree):
-    """
+    """Finds looping against dictionary keys
+
     >>> code = '''for x in y.keys():
     ...     pass
     ... '''
@@ -20,6 +23,7 @@ def find_for_x_in_y_keys(tree):
     ... '''
     >>> tree = ast.parse(code)
     >>> assert find_for_x_in_y_keys(tree) == []
+
     """
     found = []
 
@@ -35,9 +39,13 @@ def find_for_x_in_y_keys(tree):
     return found
 
 
-@h.labeled('If/RetBool/Else/RetBool')
+@h.labeled(code='W002',
+           msg='simplifiable if condition',
+           solution="instead of 'if cond: return True else return False' "
+                    "use: 'return cond'")
 def find_if_x_retbool_else_retbool(tree):
-    """
+    """Summary here
+
     >>> code = '''if foo:
     ...     return True
     ... '''
@@ -47,10 +55,10 @@ def find_if_x_retbool_else_retbool(tree):
     >>> code = '''if foo:
     ...     return False
     ... else:
-    ...     return True
-    ... '''
+    ...     return True'''
     >>> tree = ast.parse(code)
     >>> assert find_if_x_retbool_else_retbool(tree) == [1]
+
     """
     found = []
 
@@ -70,9 +78,12 @@ def find_if_x_retbool_else_retbool(tree):
     return found
 
 
-@h.labeled('JoinPathWithPlus')
+@h.labeled(code='W003',
+           msg='joining path with plus',
+           solution="instead of: 'p1 + '/' + p2', use 'os.path.join(p1, p2)'")
 def find_path_join_using_plus(tree):
-    """
+    """Finds joining path with plus
+
     >>> code = '"a" + "/" + "b"'
     >>> tree = ast.parse(code)
     >>> assert find_path_join_using_plus(tree) == [1]
@@ -88,6 +99,7 @@ def find_path_join_using_plus(tree):
     ... '''
     >>> tree = ast.parse(code)
     >>> assert find_path_join_using_plus(tree) == [2]
+
     """
     found = []
 
@@ -107,9 +119,12 @@ def find_path_join_using_plus(tree):
     return found
 
 
-@h.labeled('AssignToBuiltin')
+@h.labeled(code='W004',
+           msg='assigning to built-in',
+           solution="change symbol name to something else")
 def find_assign_to_builtin(tree):
-    """
+    """Finds assigning to built-ins
+
     >>> code = 'a = 1'
     >>> tree = ast.parse(code)
     >>> assert find_assign_to_builtin(tree) == []
@@ -121,6 +136,7 @@ def find_assign_to_builtin(tree):
     >>> code = 'a, map = 1, 2'
     >>> tree = ast.parse(code)
     >>> assert find_assign_to_builtin(tree) == [1]
+
     """
     builtins = set(__builtins__.keys())
 
@@ -138,9 +154,12 @@ def find_assign_to_builtin(tree):
     return found
 
 
-@h.labeled('GenericException')
+@h.labeled(code='W005',
+           msg='catching a generic exception',
+           solution="instead of 'except:' use 'except [Specific]:'")
 def find_generic_exception(tree):
-    """
+    """Finds generic exceptions
+
     >>> code = '''try:
     ...     a
     ... except:
@@ -166,6 +185,7 @@ def find_generic_exception(tree):
     ... '''
     >>> tree = ast.parse(code)
     >>> assert find_generic_exception(tree) == []
+
     """
     found = []
 
@@ -181,9 +201,13 @@ def find_generic_exception(tree):
     return found
 
 
-@h.labeled('SilentGenericException')
+@h.labeled(code='W006',
+           msg='catching a generic exception and passing it silently',
+           solution="instead of 'except: pass' use 'except [Specific]:' "
+                    "and handle it")
 def find_silent_exception(tree):
-    """
+    """Finds silent generic exceptions
+
     >>> code = '''try:
     ...     a
     ... except:
@@ -209,6 +233,7 @@ def find_silent_exception(tree):
     ... '''
     >>> tree = ast.parse(code)
     >>> assert find_silent_exception(tree) == []
+
     """
     found = []
 
@@ -226,9 +251,12 @@ def find_silent_exception(tree):
     return found
 
 
-@h.labeled('ImportStar')
+@h.labeled(code='W007',
+           msg='use of import star',
+           solution="make explicit imports")
 def find_import_star(tree):
-    """
+    """Finds import stars
+
     >>> code = '''from a import *'''
     >>> tree = ast.parse(code)
     >>> assert find_import_star(tree) == [1]
@@ -236,6 +264,7 @@ def find_import_star(tree):
     >>> code = '''from a import x, y'''
     >>> tree = ast.parse(code)
     >>> assert find_import_star(tree) == []
+
     """
     found = []
 
@@ -251,9 +280,12 @@ def find_import_star(tree):
     return found
 
 
-@h.labeled('EqualsTrueOrFalse')
+@h.labeled(code='W008',
+           msg='comparing to True or False',
+           solution="instead of 'a == True' use 'a' or 'bool(a)'")
 def find_equals_true_or_false(tree):
-    """
+    """Finds equals true or false
+
     >>> code = '''return a == True'''
     >>> tree = ast.parse(code)
     >>> assert find_equals_true_or_false(tree) == [1]
@@ -267,6 +299,7 @@ def find_equals_true_or_false(tree):
     >>> code = '''a == b'''
     >>> tree = ast.parse(code)
     >>> assert find_equals_true_or_false(tree) == []
+
     """
     found = []
 
@@ -284,9 +317,13 @@ def find_equals_true_or_false(tree):
     return found
 
 
-@h.labeled('DefaultArgIsList')
+@h.labeled(code='W009',
+           msg='use of list as a default arg',
+           solution="instead of 'def foo(a=[])' use "
+                    "'def foo(a=None):if not a: a = []'")
 def find_default_arg_is_list(tree):
-    """
+    """Finds default args as list
+
     >>> code = '''def foo(x, y):
     ...     pass
     ... '''
@@ -304,6 +341,7 @@ def find_default_arg_is_list(tree):
     ... '''
     >>> tree = ast.parse(code)
     >>> assert find_default_arg_is_list(tree) == [1]
+
     """
     found = []
 
