@@ -36,9 +36,24 @@ def build_parser():
 
 def fetch_files_matching(target, pattern):
     """Retrieve all files from target directory"""
-    for root, dirs, files in os.walk(target):
+    for root, _, files in os.walk(target):
         for filename in fnmatch.filter(files, pattern):
             yield os.path.join(root, filename)
+
+
+def run_checks(node, paths, code_file, verbose):
+    """Runs all available checks against node"""
+    caught = False
+    for checker in paths:
+        if checker(node):
+            caught = True
+            solution = ' (%s)' % checker.solution if verbose else ''
+            print('{}:{}: {} {}{}'.format(code_file,
+                                          node.lineno,
+                                          checker.code,
+                                          checker.msg,
+                                          solution))
+    return caught
 
 
 def main():
@@ -61,18 +76,10 @@ def main():
 
         paths = [x for x in practices.__dict__.values() if hasattr(x, 'code')]
 
-        for checker in paths:
-            adherance = checker(tree)
-            caught.append(len(adherance) > 0)
-            for lineno in adherance:
-                solution = ' (%s)' % checker.solution if args.verbose else ''
-                print('{}:{}: {} {}{}'.format(code_file,
-                                              lineno,
-                                              checker.code,
-                                              checker.msg,
-                                              solution))
+        for node in ast.walk(tree):
+            caught.append(run_checks(node, paths, code_file, args.verbose))
 
-    if any(caught) and args.fail_hard:
+    if caught and args.fail_hard:
         sys.exit(1)
 
 

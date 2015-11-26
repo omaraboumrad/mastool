@@ -1,0 +1,163 @@
+# W001
+
+    >>> code = '''for x in y.keys():
+    ...     pass
+    ... '''
+    >>> node = next(next(ast.walk(ast.parse(code))))
+    >>> assert find_for_x_in_y_keys(node)
+
+    >>> code = '''for x in y:
+    ...     pass
+    ... '''
+    >>> node = next(next(ast.walk(ast.parse(code))))
+    >>> assert not find_for_x_in_y_keys(node)
+
+# W002
+    >>> code = '''if foo:
+    ...     return True
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert not find_if_x_retbool_else_retbool(node)
+
+    >>> code = '''if foo:
+    ...     return False
+    ... else:
+    ...     return True'''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_if_x_retbool_else_retbool(node)
+
+# W003
+
+    >>> code = '"a" + "/" + "b"'
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_path_join_using_plus(node)
+
+    >>> code = '''a = "foo"
+    ... a + "/" + "b"
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_path_join_using_plus(node)
+
+    >>> code = '''a, b = "foo", "bar"
+    ... a + "/" + b
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_path_join_using_plus(node)
+
+# W004
+
+    >>> code = 'a = 1'
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert not find_assign_to_builtin(node)
+
+    >>> code = 'id = 1'
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_assign_to_builtin(node)
+
+    >>> code = 'a, map = 1, 2'
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_assign_to_builtin(node)
+
+# W005
+
+    >>> code = '''try:
+    ...     a
+    ... except:
+    ...     b
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_generic_exception(node)
+
+    >>> code = '''try:
+    ...     a
+    ... except:
+    ...     b
+    ... except:
+    ...     c
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_generic_exception(node)
+
+    >>> code = '''try:
+    ...     a
+    ... except Exception:
+    ...     b
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert not find_generic_exception(node)
+
+# W006
+
+    >>> code = '''try:
+    ...     a
+    ... except:
+    ...     pass
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_silent_exception(node)
+
+    >>> code = '''try:
+    ...     a
+    ... except:
+    ...     pass
+    ... except:
+    ...     pass
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_silent_exception(node)
+
+    >>> code = '''try:
+    ...     a
+    ... except Exception:
+    ...     pass
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert not find_silent_exception(node)
+
+# W007
+
+    >>> code = '''from a import *'''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_import_star(node)
+
+    >>> code = '''from a import x, y'''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert not find_import_star(node)
+
+# W008
+
+    >>> code = '''return a == True'''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_equals_true_or_false(node)
+
+    >>> code = '''if a == False:
+    ...     pass
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_equals_true_or_false(node)
+
+    >>> code = '''a == b'''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert not find_equals_true_or_false(node)
+
+# W009
+
+    >>> code = '''def foo(x, y):
+    ...     pass
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert not find_default_arg_is_list(node)
+
+    >>> code = '''def foo(x, y=[]):
+    ...     pass
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_default_arg_is_list(node)
+
+    >>> code = '''def foo(x, y=[1,2,3]):
+    ...     pass
+    ... '''
+    >>> node = next(ast.walk(ast.parse(code)))
+    >>> assert find_default_arg_is_list(node)
+
+
