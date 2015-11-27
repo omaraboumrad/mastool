@@ -68,16 +68,29 @@ def main():
     caught = []
 
     for code_file in files:
-        try:
-            tree = ast.parse(open(code_file).read())
-        except SyntaxError:
-            print("Error: Could not parse: {}".format(code_file))
-            continue
+        with open(code_file) as file_:
+            code = file_.read()
+            lines = code.splitlines()
+            try:
+                tree = ast.parse(code)
+            except SyntaxError:
+                print("Error: Could not parse: {}".format(code_file))
+                continue
 
-        paths = [x for x in practices.__dict__.values() if hasattr(x, 'code')]
+            paths = [x for x in practices.__dict__.values()
+                     if hasattr(x, 'code')]
 
-        for node in ast.walk(tree):
-            caught.append(run_checks(node, paths, code_file, args.verbose))
+            for node in ast.walk(tree):
+                skip = (
+                    hasattr(node, 'lineno') and
+                    lines[node.lineno-1].strip().endswith('# noqa')
+                )
+
+                if not skip:
+                    caught.append(run_checks(node,
+                                             paths,
+                                             code_file,
+                                             args.verbose))
 
     if caught and args.fail_hard:
         sys.exit(1)

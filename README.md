@@ -103,3 +103,7 @@ W009 | use of list as a default arg
 3. How do I show the suggested practice?
 
     $ mastool --verbose code.py
+
+4. How can I make mastool ignore an entire line?
+
+    add a `# noqa` comment at the end of the line.
