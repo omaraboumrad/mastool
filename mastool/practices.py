@@ -6,7 +6,7 @@ import ast
 from mastool import helpers as h
 
 
-@h.labeled(code='W001',
+@h.labeled(code='M001',
            msg='looping against dictionary keys',
            solution="use 'for key in dictionary' instead.")
 def find_for_x_in_y_keys(node):
@@ -17,7 +17,7 @@ def find_for_x_in_y_keys(node):
     )
 
 
-@h.labeled(code='W002',
+@h.labeled(code='M002',
            msg='simplifiable if condition',
            solution="instead of 'if cond: return True else return False' "
                     "use: 'return cond'")
@@ -33,7 +33,7 @@ def find_if_x_retbool_else_retbool(node):
     )
 
 
-@h.labeled(code='W003',
+@h.labeled(code='M003',
            msg='joining path with plus',
            solution="instead of: 'p1 + '/' + p2', use 'os.path.join(p1, p2)'")
 def find_path_join_using_plus(node):
@@ -48,7 +48,7 @@ def find_path_join_using_plus(node):
     )
 
 
-@h.labeled(code='W004',
+@h.labeled(code='M004',
            msg='assigning to built-in',
            solution="change symbol name to something else")
 def find_assign_to_builtin(node):
@@ -61,7 +61,7 @@ def find_assign_to_builtin(node):
     )
 
 
-@h.labeled(code='W005',
+@h.labeled(code='M005',
            msg='catching a generic exception',
            solution="instead of 'except:' use 'except [Specific]:'")
 def find_generic_exception(node):
@@ -72,7 +72,7 @@ def find_generic_exception(node):
     )
 
 
-@h.labeled(code='W006',
+@h.labeled(code='M006',
            msg='catching a generic exception and passing it silently',
            solution="instead of 'except: pass' use 'except [Specific]:' "
                     "and handle it")
@@ -86,7 +86,7 @@ def find_silent_exception(node):
     )
 
 
-@h.labeled(code='W007',
+@h.labeled(code='M007',
            msg='use of import star',
            solution="make explicit imports")
 def find_import_star(node):
@@ -97,7 +97,7 @@ def find_import_star(node):
     )
 
 
-@h.labeled(code='W008',
+@h.labeled(code='M008',
            msg='comparing to True or False',
            solution="instead of 'a == True' use 'a' or 'bool(a)'")
 def find_equals_true_or_false(node):
@@ -110,7 +110,7 @@ def find_equals_true_or_false(node):
     )
 
 
-@h.labeled(code='W009',
+@h.labeled(code='M009',
            msg='use of list as a default arg',
            solution="instead of 'def foo(a=[])' use "
                     "'def foo(a=None):if not a: a = []'")

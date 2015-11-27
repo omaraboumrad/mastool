@@ -24,14 +24,14 @@ static analysis for bad and/or avoidable practices
 
 Code | Message
 --- | ---
-W001 | looping against dictionary keys
+M001 | looping against dictionary keys
 
     for x in d.keys():
         ...
 
 Code | Message
 --- | ---
-W002 | simplifiable if condition
+M002 | simplifiable if condition
 
     if cond:
         return True
@@ -40,19 +40,19 @@ W002 | simplifiable if condition
 
 Code | Message
 --- | ---
-W003 | joining path with plus
+M003 | joining path with plus
 
     path1 + '/' + path2
 
 Code | Message
 --- | ---
-W004 | assigning to built-in
+M004 | assigning to built-in
 
     id = 1
 
 Code | Message
 --- | ---
-W005 | catching a generic exception
+M005 | catching a generic exception
 
     try:
         xyz
@@ -61,7 +61,7 @@ W005 | catching a generic exception
 
 Code | Message
 --- | ---
-W006 | catching a generic exception and passing it silently
+M006 | catching a generic exception and passing it silently
 
     try:
         xyz
@@ -70,19 +70,19 @@ W006 | catching a generic exception and passing it silently
 
 Code | Message
 --- | ---
-W007 | use of import star
+M007 | use of import star
 
     from a import *
 
 Code | Message
 --- | ---
-W008 | comparing to True or False
+M008 | comparing to True or False
 
     a == True
 
 Code | Message
 --- | ---
-W009 | use of list as a default arg
+M009 | use of list as a default arg
 
     def foo(x, y=[]):
         pass
