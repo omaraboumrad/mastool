@@ -6,86 +6,36 @@ static analysis for bad and/or avoidable practices
 
 ### Installation
 
+mastool is available on pypi, you can install from source or simply:
+
     pip install mastool
 
 ### Usage
 
-    usage: mastool [-h] [--verbove] [--fail-hard] TARGET
+After installing mastool, flake8 would get equipped with mastool's checks.
 
-    positional arguments:
-      TARGET           Target file or folder to run mastool against
+    $ flake8 [PATH]
 
-    optional arguments:
-      -h, --help       show this help message and exit
-      --verbove, -v    enable suggested solution
-      --fail-hard, -f  exits with a none-zero status when issues found
+Mastool also adds the following switch to flake8, which provides a quick
+suggestion about what to replace the reported code with.
 
-### Checks For
+    $ flake8 --with-solutions
+
+### Checks
+
+See [here](https://github.com/omaraboumrad/mastool/wiki/Practices) for more details or the summary below.
 
 Code | Message
 --- | ---
 M001 | looping against dictionary keys
-
-    for x in d.keys():
-        ...
-
-Code | Message
---- | ---
 M002 | simplifiable if condition
-
-    if cond:
-        return True
-    else:
-        return False
-
-Code | Message
---- | ---
 M003 | joining path with plus
-
-    path1 + '/' + path2
-
-Code | Message
---- | ---
 M004 | assigning to built-in
-
-    id = 1
-
-Code | Message
---- | ---
 M005 | catching a generic exception
-
-    try:
-        xyz
-    except:
-        abc
-
-Code | Message
---- | ---
 M006 | catching a generic exception and passing it silently
-
-    try:
-        xyz
-    except:
-        pass
-
-Code | Message
---- | ---
 M007 | use of import star
-
-    from a import *
-
-Code | Message
---- | ---
 M008 | comparing to True or False
-
-    a == True
-
-Code | Message
---- | ---
 M009 | use of list as a default arg
-
-    def foo(x, y=[]):
-        pass
 
 ---
 
@@ -94,16 +44,14 @@ M009 | use of list as a default arg
 1. Some of these issues are not bad/erroneous!
 
     Yes, in various contexts sometimes it may be ok (and possibly unavoidable) to
-    use these constructs, at which point you can ignore them. (Soon)
+    use these constructs, at which point you can ignore them using Flake8's [config](http://flake8.readthedocs.org/en/latest/config.html)
+    mechanism
 
-2. How do I make the script return a none-0 code when any result found?
+2. Why did this tool become as a Flake8 extension?
 
-    $ mastool --fail-hard code.py
+    Flake8 provides a magnificent base for static analysis, there's no point
+    in reinventing the wheel.
 
-3. How do I show the suggested practice?
+3. What are some other similar tools?
 
-    $ mastool --verbose code.py
-
-4. How can I make mastool ignore an entire line?
-
-    add a `# noqa` comment at the end of the line.
+    You can find some informatin about the subject on my [blog](http://aboumrad.info/essential-python-tools-quality.html)
