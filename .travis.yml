@@ -1,5 +1,7 @@
+sudo: false
 language: python
 python:
-  - "2.7"
-  - "3.4"
-script: python -m doctest mastool/practices.py
+    - "2.7"
+    - "3.4"
+install: pip install tox-travis
+script: tox
