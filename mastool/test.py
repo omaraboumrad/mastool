@@ -71,6 +71,18 @@ ALL_FIXTURES = [
                'list_with_vals_as_arg.py'],
         ignores=['function_def.py']
     ),
+
+    Fixture(
+        practice=practices.find_if_expression_as_statement,
+        finds=['if_expression_as_statement.py'],
+        ignores=['if_expression.py']
+    ),
+
+    Fixture(
+        practice=practices.find_comprehension_as_statement,
+        finds=['comprehension_as_statement.py'],
+        ignores=['comprehension.py']
+    ),
 ]
 
 

@@ -120,3 +120,27 @@ def find_default_arg_is_list(node):
         isinstance(node, ast.FunctionDef)
         and any([n for n in node.args.defaults if isinstance(n, ast.List)])
     )
+
+
+@h.labeled(code='M010',
+           msg='use of "if" expression as statement',
+           solution='use a normal "if" condition instead')
+def find_if_expression_as_statement(node):
+    """Finds an "if" expression as a statement"""
+    return (
+        isinstance(node, ast.Expr)
+        and isinstance(node.value, ast.IfExp)
+    )
+
+
+@h.labeled(code='M011',
+           msg='use of a comprehension as statement',
+           solution='use a loop instead')
+def find_comprehension_as_statement(node):
+    """Finds a comprehension as a statement"""
+    return (
+        isinstance(node, ast.Expr)
+        and isinstance(node.value, (ast.ListComp,
+                                    ast.DictComp,
+                                    ast.SetComp))
+    )
