@@ -1,5 +1,6 @@
 """Mastool static analysis tool as a Flake8 plugin"""
 import ast
+
 from mastool import practices
 
 __version__ = '0.1.1'
