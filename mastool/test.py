@@ -90,9 +90,13 @@ def ignores(result):
     assert not result
 
 
+def samples(path):
+    """Samples finder"""
+    return os.path.join('mastool/samples', path)
+
+
 def test_practices():
     """Generates tests using available fixtures"""
-    samples = lambda c: os.path.join('mastool/samples', c)
     for fixture in ALL_FIXTURES:
         for code in fixture.finds:
             yield check, open(samples(code)).read(), fixture.practice, finds
