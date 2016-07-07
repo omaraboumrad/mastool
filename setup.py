@@ -18,7 +18,7 @@ setup(
     keywords=['static', 'analysis', 'practices'],
     install_requires=[
         'setuptools',
-        'flake8 <= 2.6.2',
+        'flake8',
     ],
     py_modules=['mastool'],
 

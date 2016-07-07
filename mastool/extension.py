@@ -23,7 +23,6 @@ class Mastool(object):
                           default=False,
                           action='store',
                           help='Enables mastool possible solutions')
-        parser.config_options.append('with-solutions')
 
     @classmethod
     def parse_options(cls, options):
