@@ -144,3 +144,14 @@ def find_comprehension_as_statement(node):
                                     ast.DictComp,
                                     ast.SetComp))
     )
+
+
+@h.labeled(code='M012',
+           msg='use of a generator as statement',
+           solution='this done nothing!')
+def find_generator_as_statement(node):
+    """Finds a generator as a statement"""
+    return (
+        isinstance(node, ast.Expr)
+        and isinstance(node.value, ast.GeneratorExp)
+    )

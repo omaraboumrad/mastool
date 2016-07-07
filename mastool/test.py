@@ -83,6 +83,12 @@ ALL_FIXTURES = [
         finds=['comprehension_as_statement.py'],
         ignores=['comprehension.py']
     ),
+
+    Fixture(
+        practice=practices.find_generator_as_statement,
+        finds=['generator_as_statement.py'],
+        ignores=['generator.py']
+    ),
 ]
 
 

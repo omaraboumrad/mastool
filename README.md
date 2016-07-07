@@ -38,6 +38,7 @@ M008 | comparing to True or False
 M009 | use of list as a default arg
 M010 | use of "if" expression as statement
 M011 | use of a comprehension as statement
+M012 | use of a generator as statement
 
 ---
 
