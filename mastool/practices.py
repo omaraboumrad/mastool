@@ -2,6 +2,7 @@
 Practices and Checks listing
 """
 import ast
+import sys
 
 from mastool import helpers as h
 
@@ -53,7 +54,43 @@ def find_path_join_using_plus(node):
            solution="change symbol name to something else")
 def find_assign_to_builtin(node):
     """Finds assigning to built-ins"""
-    builtins = set(__builtins__.keys())
+
+    # The list of forbidden builtins is constant and not determined at
+    # runtime anyomre. The reason behind this change is that certain
+    # modules (like `gettext` for instance) would mess with the
+    # builtins module making this practice yield false positives.
+    if sys.version_info.major == 3:
+        builtins = {"abs", "all", "any", "ascii", "bin", "bool",
+                    "bytearray", "bytes", "callable", "chr",
+                    "classmethod", "compile", "complex", "delattr",
+                    "dict", "dir", "divmod", "enumerate", "eval",
+                    "exec", "filter", "float", "format", "frozenset",
+                    "getattr", "globals", "hasattr", "hash", "help",
+                    "hex", "id", "__import__", "input", "int",
+                    "isinstance", "issubclass", "iter", "len", "list",
+                    "locals", "map", "max", "memoryview", "min",
+                    "next", "object", "oct", "open", "ord", "pow",
+                    "print", "property", "range", "repr", "reversed",
+                    "round", "set", "setattr", "slice", "sorted",
+                    "staticmethod", "str", "sum", "super", "tuple",
+                    "type", "vars", "zip"}
+    else:
+        builtins = {"abs", "all", "any", "basestring", "bin", "bool",
+                    "bytearray", "callable", "chr", "classmethod",
+                    "cmp", "compile", "complex", "delattr", "dict",
+                    "dir", "divmod", "enumerate", "eval", "execfile",
+                    "file", "filter", "float", "format", "frozenset",
+                    "getattr", "globals", "hasattr", "hash", "help",
+                    "hex", "id", "import__", "input", "int",
+                    "isinstance", "issubclass", "iter", "len", "list",
+                    "locals", "long", "map", "max", "memoryview",
+                    "min", "next", "object", "oct", "open", "ord",
+                    "pow", "print", "property", "range", "raw_input",
+                    "reduce", "reload", "repr", "reversed", "round",
+                    "set", "setattr", "slice", "sorted",
+                    "staticmethod", "str", "sum", "super", "tuple",
+                    "type", "unichr", "unicode", "vars", "xrange",
+                    "zip"}
 
     return (
         isinstance(node, ast.Assign)
