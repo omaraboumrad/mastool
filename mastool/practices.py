@@ -148,15 +148,28 @@ def find_equals_true_or_false(node):
 
 
 @h.labeled(code='M009',
-           msg='use of list as a default arg',
-           solution="instead of 'def foo(a=[])' use "
-                    "'def foo(a=None):if not a: a = []'")
-def find_default_arg_is_list(node):
-    """Finds default args as list"""
+           msg='poor choice of default argument',
+           solution="use `None` as the default arg, and "
+           "initialize the variable inside the function block")
+def find_poor_default_arg(node):
+    """Finds poor default args"""
+    poor_defaults = [
+        ast.Call,
+        ast.Dict,
+        ast.DictComp,
+        ast.GeneratorExp,
+        ast.List,
+        ast.ListComp,
+        ast.Set,
+        ast.SetComp,
+    ]
+
+    # pylint: disable=unidiomatic-typecheck
     return (
         isinstance(node, ast.FunctionDef)
-        and any([n for n in node.args.defaults if isinstance(n, ast.List)])
+        and any((n for n in node.args.defaults if type(n) in poor_defaults))
     )
+    # pylint: enable=unidiomatic-typecheck
 
 
 @h.labeled(code='M010',
