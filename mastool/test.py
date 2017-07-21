@@ -66,9 +66,17 @@ ALL_FIXTURES = [
     ),
 
     Fixture(
-        practice=practices.find_default_arg_is_list,
-        finds=['list_as_arg.py',
-               'list_with_vals_as_arg.py'],
+        practice=practices.find_poor_default_arg,
+        finds=['dict_as_arg.py',
+               'dict_with_vals_as_arg.py',
+               'dictcomp_as_arg.py',
+               'genexp_as_arg.py',
+               'list_with_vals_as_arg.py',
+               'listcomp_as_arg.py',
+               'set_as_arg.py',
+               'set_with_vals_as_arg.py',
+               'setcomp_as_arg.py',
+               'list_as_arg.py'],
         ignores=['function_def.py']
     ),
 
